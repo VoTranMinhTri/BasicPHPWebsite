@@ -1,0 +1,15 @@
+<?php
+session_start();
+$cart=$_SESSION['cart'];
+$masp=$_GET['idsp'];
+if($masp==0)
+{
+	unset($_SESSION['cart']);
+}
+else
+{
+	unset($_SESSION['cart'][$masp]);
+}
+header("location:../../Pages/cart.php");
+exit();
+?>

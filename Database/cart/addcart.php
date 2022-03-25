@@ -1,0 +1,34 @@
+<?php
+include("../../DB.php");
+session_start();
+if(isset($_GET["btn_submit"]))
+{
+$masp=$_GET["MASP"];
+$size=$_GET["SIZE"];
+$soluong=$_GET["SOLUONG"];
+var_dump($masp);
+$result=$db->prepare('select * from SANPHAM where masp Like :masp and size =:size');
+$result->bindValue(':masp',$masp,PDO::PARAM_STR);
+$result->bindValue(':size',$size,PDO::PARAM_INT);
+$result->execute();
+$rowdata=$result->fetchALL();
+$tensp=$rowdata[0]['TENSP'];
+$gia=$rowdata[0]['GIA'];
+$hinhanh=$rowdata[0]['HINHANH'];
+$size=$rowdata[0]['SIZE'];
+var_dump($tensp);
+var_dump($gia);
+var_dump($hinhanh);
+if(isset($_SESSION['cart'][$masp]))
+{
+	$_SESSION['cart'][$masp]['soluong']=$_SESSION['cart'][$masp]['soluong']+$soluong;
+}
+else
+{
+	$_SESSION['cart'][$masp]=array("masp"=>$masp,"tensp"=>$tensp,"gia"=>$gia,"hinhanh"=>$hinhanh,"size"=>$size,"soluong"=>$soluong);
+	
+}
+	//var_dump($_SESSION);
+	header("location:../../Pages/cart.php");
+}
+?>
